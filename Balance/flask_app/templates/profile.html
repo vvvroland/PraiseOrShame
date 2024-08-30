@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <style>
+        * {
+            border: none;
+            margin: none;
+            padding: 30px;
+            font-family: sans-serif;
+        }
+
+        .border{
+            border: 3px solid black;
+        }
+
+        .contain{
+            border: 3px solid black;
+            background-color: mediumslateblue;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 400px;
+            padding: 10px;
+            margin-top: 70px;
+            align-self: center;
+            gap: 10px;
+        }
+
+        .button{
+            background-color: indigo;
+            color: aqua;
+            border: 2px solid black;
+            width: 30%;
+            align-self: flex-end;
+        }
+
+        .options{
+            display: flex;
+        }
+
+        .line{
+            text-align: center;
+            align-items: center;
+        }
+
+        .banner{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .whole{
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .between{
+            margin: 30px;
+        }
+
+        .list{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .inline {
+        display: inline;
+        }
+
+        .link-button {
+        background: none;
+        border: none;
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 1em;
+        font-family: serif;
+        }
+        .link-button:focus {
+        outline: none;
+        }
+        .link-button:active {
+        color:red;
+        }
+
+        .viewleft{
+            flex: 2;
+        }
+        .viewcenter{
+            flex: 2;
+        }
+        .viewright{
+            flex: 1;
+        }
+        .sunset{
+            justify-content: end;
+        }
+
+    </style>
+    
+    <title>Profile</title>
+</head>
+<body>
+    <div class="banner">
+        <h1>Welcome, {{one_user.user_name}}</h1>
+        <div class="banner">
+            <a href="/community">Community Page</a>
+            <a href="/logout" >Log Out</a>
+        </div>
+    </div>
+    {% if view_user.id != session.user_id%}
+        <h2>Viewing {{view_user.user_name}}'s page</h2>
+    {% endif %}
+    <div class="banner">
+        <a href="/show_add/praise" class="button btn btn-lrg btn-primary btn-outline-dark">Add Praise</a>
+        <a href="/show_add/shame" class="button btn btn-lrg btn-primary btn-outline-dark">Add Shame</a>
+    </div>
+    <div class="options">
+        <div class="viewleft border">
+            <h4>Public Praise</h4>
+            <table class="table table-success table-striped table-hover table-bordered border-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">Praises</th>
+                        <th scope="col">Likes</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for one_praise in public_praise %}
+                    <tr>
+                        <td>{{one_praise.sun}}</td>
+                        <td>{{one_praise.liker}}</td>
+                        {% if view_user.id == session.user_id%}
+                        <td><a href="/edit/{{one_praise.id}}/praise">Edit</a><a href="/delete_confirm/{{one_praise.id}}/praise">Delete</a></td>
+                        {%else%}
+                        <td><a href="/like/{{one_praise.id}}/praise">AddLikes</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="viewcenter border">
+            <h4>Public Shame</h4>
+            <table class="table table-danger table-striped table-hover table-bordered border-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">Shames</th>
+                        <th scope="col">Likes</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for one_shame in public_shame %}
+                        <tr>
+                            <td>{{one_shame.shade}}</td>
+                            <td>{{one_shame.liker}}</td>
+                            {% if view_user.id == session.user_id%}
+                                <td><a href="/edit/{{one_shame.id}}/shame">Edit</a><a href="/delete_confirm/{{one_shame.id}}/shame">Delete</a></td>
+                                {%else%}
+                                <td><a href="/like/{{one_shame.id}}/praise">AddLikes</a></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="options">
+        <div class="viewleft border">
+            <h4>Private Praise</h4>
+            <table class="table table-success table-striped table-hover table-bordered border-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">Praises</th>
+                        <th scope="col">Likes</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for one_praise in private_praise %}
+                    <tr>
+                        <td>{{one_praise.sun}}</td>
+                        <td>{{one_praise.liker}}</td>
+                        {% if view_user.id == session.user_id%}
+                            <td><a href="/edit/{{one_praise.id}}/praise">Edit </a><a href="/delete_confirm/{{one_praise.id}}/praise"> Delete</a></td>
+                            {%else%}
+                            <td><a href="/like/{{one_praise.id}}/praise">AddLikes</a></td>
+                        {% endif %}
+                        </tr>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="viewcenter border">
+            <h4>Private Shame</h4>
+            <table class="table table-danger table-striped table-hover table-bordered border-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">Shames</th>
+                        <th scope="col">Likes</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for one_shame in private_shame %}
+                        <tr>
+                            <td>{{one_shame.shade}}</td>
+                            <td>{{one_shame.liker}}</td>
+                            {% if view_user.id == session.user_id%}
+                                <td><a href="/edit/{{one_shame.id}}/shame">Edit</a><a href="/delete_confirm/{{one_shame.id}}/shame">Delete</a></td>
+                                {%else%}
+                                <td><a href="/like/{{one_shame.id}}/praise">AddLikes</a></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %} 
+        <h4>Not quite there!</h4>       
+            {% for message in messages %}
+                <p>{{message}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='my_style.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='my_script.js') }}"></script>
+    
+</body>
+</html>
